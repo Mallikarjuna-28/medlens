@@ -113,8 +113,10 @@ app.use((err: Error & { code?: string; status?: number }, _req: Request, res: Re
   res.status(status).json({ error: message });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.info(`MedLens server running on port ${PORT} (${process.env.NODE_ENV ?? 'development'})`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.info(`MedLens server running on port ${PORT} (${process.env.NODE_ENV ?? 'development'})`);
+  });
+}
 
 export { app };

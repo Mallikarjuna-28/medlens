@@ -175,6 +175,17 @@ tests/
 
 ---
 
+## Accessibility
+
+- **Semantic HTML5** — `<header>`, `<main>`, `<nav>`, `<footer>`, and proper `<table>`/`<thead>`/`<tbody>`/`<caption>` elements for lab result grids.
+- **Form Accessibility** — Explicit `<label htmlFor="...">` bindings paired with matching `id` attributes across all intake, upload, and edit controls.
+- **Focus Indicators** — Styled `:focus-visible` outline rings on interactive buttons, inputs, and links for keyboard users.
+- **Screen Reader Support** — `aria-label`, `aria-describedby`, `aria-invalid`, `aria-required`, and `role="alert"` attributes configured.
+- **Non-Color Reliance** — Reference range labels (`RangeLabel`) and source badges (`SourceBadge`) utilize clear text labels and distinct symbols/icons alongside HSL colors.
+- **Full Keyboard Navigation** — Complete patient intake, report upload, verification, and summary workflow navigable via Tab, Enter, and Space keys.
+
+---
+
 ## Testing
 
 ```bash
