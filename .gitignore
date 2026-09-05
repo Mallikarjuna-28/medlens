@@ -1,0 +1,39 @@
+# Environment variables - never commit
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Database files
+data/
+*.db
+*.sqlite
+
+# Upload temp files
+uploads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
