@@ -25,6 +25,17 @@ describe('checkSummarySafety', () => {
       const count = (result.content.match(/This summary is for organizational purposes/g) ?? []).length;
       expect(count).toBe(1);
     });
+    it('allows plain lab values like "glucose is 105 mg/dl"', () => {
+      const content = `Patient fasting blood glucose is 105 mg/dl which is slightly elevated. ${DISCLAIMER}`;
+      const result = checkSummarySafety(content);
+      expect(result.safe).toBe(true);
+    });
+
+    it('allows lab values consistent with reference range', () => {
+      const content = `Thyroid TSH level of 2.1 mIU/L is consistent with standard reference range. ${DISCLAIMER}`;
+      const result = checkSummarySafety(content);
+      expect(result.safe).toBe(true);
+    });
   });
 
   describe('unsafe content — diagnosis language', () => {
@@ -35,6 +46,26 @@ describe('checkSummarySafety', () => {
 
     it('rejects content with "diagnosis"', () => {
       const result = checkSummarySafety(`The diagnosis is Type 2 Diabetes. ${DISCLAIMER}`);
+      expect(result.safe).toBe(false);
+    });
+
+    it('rejects "consistent with diabetes"', () => {
+      const result = checkSummarySafety(`This lab result is consistent with diabetes. ${DISCLAIMER}`);
+      expect(result.safe).toBe(false);
+    });
+
+    it('rejects "suggests hypertension"', () => {
+      const result = checkSummarySafety(`Elevated reading suggests hypertension. ${DISCLAIMER}`);
+      expect(result.safe).toBe(false);
+    });
+
+    it('rejects "indicative of infection"', () => {
+      const result = checkSummarySafety(`High WBC count is indicative of infection. ${DISCLAIMER}`);
+      expect(result.safe).toBe(false);
+    });
+
+    it('rejects "you have" followed by condition', () => {
+      const result = checkSummarySafety(`The report shows you have Diabetes. ${DISCLAIMER}`);
       expect(result.safe).toBe(false);
     });
   });
@@ -57,8 +88,13 @@ describe('checkSummarySafety', () => {
       expect(result.safe).toBe(false);
     });
 
-    it('rejects content with numeric mg values', () => {
+    it('rejects content with numeric mg values near prescription verbs', () => {
       const result = checkSummarySafety(`Patient should take 500mg daily. ${DISCLAIMER}`);
+      expect(result.safe).toBe(false);
+    });
+
+    it('rejects prescribe verb near dosage unit', () => {
+      const result = checkSummarySafety(`Prescribe 100 mg of medication. ${DISCLAIMER}`);
       expect(result.safe).toBe(false);
     });
   });
